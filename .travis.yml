@@ -20,4 +20,5 @@ after_success:
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker build -t admiral0/kiwibot:latest .
 - docker push admiral0/kiwibot:latest
+- chmod 600 deploy_key
 - ssh -i deploy_key deployer@198.211.126.141
