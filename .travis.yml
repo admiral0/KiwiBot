@@ -12,7 +12,7 @@ python:
 before_install:
 - openssl aes-256-cbc -K $encrypted_78a67e07d999_key -iv $encrypted_78a67e07d999_iv
   -in deploy_key.enc -out deploy_key -d
-- echo -e "Host example.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- echo -e "Host 198.211.126.141\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 install:
 - pip install -r requirements-dev.txt
 script: py.test src
