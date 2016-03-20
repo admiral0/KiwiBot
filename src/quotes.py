@@ -13,7 +13,7 @@ class Quotes:
     def add(self, chat_id, author, quote):
         c = self.conn.cursor()
         c.execute("INSERT INTO quotes VALUES (?,?,?);", (chat_id, author, quote))
-        c.commit()
+        self.conn.commit()
 
     def random(self, chat_id):
         c = self.conn.cursor()

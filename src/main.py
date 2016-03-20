@@ -71,7 +71,7 @@ def minimigrate(con):
     c.execute("""
             CREATE TABLE if not exists quotes (chat_id VARCHAR(128), author VARCHAR(128), quote TEXT);
     """)
-    c.commit()
+    con.commit()
 
 
 def main():
