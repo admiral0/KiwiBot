@@ -28,7 +28,9 @@ def quote_dispatch(bot,update,args):
     elif args[0] == 'add':
         return quotes_add(bot, update, args)
     elif args[0] == 'random':
-        return quotes_random(bot,update)
+        return quotes_random(bot, update)
+    elif args[0] == 'search':
+        return quotes_search(bot, update, ' '.join(args[2:]))
     else:
         bot.sendMessage(update.message.chat_id, text='usage /quote add|random|search')
 
@@ -41,23 +43,35 @@ def quotes_add(bot, update, args):
         logging.log(25, (str(update.message.chat_id), args))
         qmgr.add(str(update.message.chat_id), args[1], ' '.join(args[2:]))
         qmgr.conn.close()
+        bot.sendMessage(update.message.chat_id, text='quote aggiunto.')
 
 
 def quotes_random(bot,update):
+    qmgr.refresh_connection()
     mq = qmgr.random(update.message.chat_id)
+    qmgr.conn.close()
     if mq is None:
-        qmgr.refresh_connection()
-        bot.sendMessage(update.message.chat_id, "Non trovo nessuna quote")
-        qmgr.conn.close()
+        bot.sendMessage(update.message.chat_id, text="Non trovo nessuna quote")
     else:
-        bot.sendMessage(update.message.chat_id, mq[2] + "\n\n" + mq[1])
+        bot.sendMessage(update.message.chat_id, text=mq[2] + "\n\n" + mq[1])
 
+
+def quotes_search(bot,update,arg):
+    qmgr.refresh_connection()
+    amq = qmgr.search(update.message.chat_id, arg)
+    qmgr.conn.close()
+    if len(amq) == 0:
+        bot.sendMessage(update.message.chat_id, text="Non ho trovato nessun quote")
+    else:
+        for mq in amq:
+            bot.sendMessage(update.message.chat_id, text=mq[2] + "\n" + mq[1])
 
 def minimigrate(con):
     c = con.cursor()
     c.execute("""
             CREATE TABLE if not exists quotes (chat_id VARCHAR(128), author VARCHAR(128), quote TEXT);
     """)
+    c.commit()
 
 
 def main():
