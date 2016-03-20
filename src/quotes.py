@@ -1,7 +1,14 @@
+import sqlite3
+
 
 class Quotes:
-    def __init__(self, conn):
+
+    def __init__(self, connstr, conn=None):
+        self.connstring = connstr
         self.conn = conn
+
+    def refresh_connection(self):
+        self.conn = sqlite3.connect(self.connstring)
 
     def add(self, chat_id, author, quote):
         c = self.conn.cursor()
@@ -13,7 +20,7 @@ class Quotes:
         return c.fetchone()
 
     def search(self, chat_id, search):
-        search = '%' + search + '%'
         c = self.conn.cursor()
+        search = '%' + search + '%'
         c.execute("SELECT * FROM quotes WHERE chat_id = ? and quote LIKE ?;", (chat_id, search))
         return c.fetchall()

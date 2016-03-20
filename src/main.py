@@ -10,7 +10,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-conn = None
+conn_string = 'data/data.sqlite3'
 qmgr = None
 
 
@@ -37,14 +37,19 @@ def quotes_add(bot, update, args):
     if len(args) < 3:
         bot.sendMessage(update.message.chat_id, text='usage /quote add <author> <quote>')
     else:
+        qmgr.refresh_connection()
         qmgr.add(str(update.message.chat_id), args[1], ' '.join(args[2:]))
+        qmgr.conn.close()
 
 
 def quotes_random(bot,update):
     mq = qmgr.random(update.message.chat_id)
     if mq is None:
+        qmgr.refresh_connection()
         bot.sendMessage(update.message.chat_id, "Non trovo nessuna quote")
-    bot.sendMessage(update.message.chat_id, mq[2] + "\n\n" + mq[1])
+        qmgr.conn.close()
+    else:
+        bot.sendMessage(update.message.chat_id, mq[2] + "\n\n" + mq[1])
 
 
 def minimigrate(con):
@@ -70,7 +75,8 @@ def main():
     updater.idle()
 
 if __name__ == '__main__':
-    conn = sqlite3.connect('data/data.sqlite3')
+    conn = sqlite3.connect(conn_string)
     minimigrate(conn)
-    qmgr = Quotes(conn)
+    conn.close()
+    qmgr = Quotes(conn_string)
     main()

@@ -7,7 +7,7 @@ minimigrate(connection)
 
 
 def test_add():
-    q = Quotes(connection)
+    q = Quotes(':memory:', connection)
     q.add("test_id", "author", "text")
     c = connection.cursor()
     c.execute(
@@ -19,12 +19,12 @@ def test_add():
 
 
 def test_random():
-    q = Quotes(connection)
+    q = Quotes(':memory:', connection)
     q.add('a', 'b', 'c')
     assert q.random('a') is not None
 
 
 def test_search():
-    q = Quotes(connection)
+    q = Quotes(':memory:', connection)
     q.add('test', 'antani', 'cacca')
     assert q.search('test', 'cacca')[0][1] == 'antani'
