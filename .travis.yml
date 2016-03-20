@@ -15,7 +15,7 @@ before_install:
 - echo -e "Host 198.211.126.141\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 install:
 - pip install -r requirements-dev.txt
-script: py.test src
+script: PYTHONPATH=src py.test src/test/
 after_success:
 - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 - docker build -t admiral0/kiwibot:latest .
