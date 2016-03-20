@@ -55,7 +55,6 @@ def minimigrate(con):
 
 
 def main():
-    minimigrate()
 
     botapi = getenv('KIWI_BOT_API_KEY')
     updater = Updater(botapi)
@@ -72,5 +71,6 @@ def main():
 
 if __name__ == '__main__':
     conn = sqlite3.connect('data/data.sqlite3')
+    minimigrate(conn)
     qmgr = Quotes(conn)
     main()
