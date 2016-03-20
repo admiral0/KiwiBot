@@ -38,6 +38,7 @@ def quotes_add(bot, update, args):
         bot.sendMessage(update.message.chat_id, text='usage /quote add <author> <quote>')
     else:
         qmgr.refresh_connection()
+        logging.log(25, (str(update.message.chat_id), args))
         qmgr.add(str(update.message.chat_id), args[1], ' '.join(args[2:]))
         qmgr.conn.close()
 
