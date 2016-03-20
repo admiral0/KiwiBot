@@ -9,7 +9,7 @@ RUN apk --update upgrade && \
 RUN mkdir -p /usr/src/app
 
 COPY src /usr/src/app
-COPY requirements.txt /usr/src/app
+COPY requirements.txt /usr/src/app/requirements.txt
 
 WORKDIR /usr/src/app
 
