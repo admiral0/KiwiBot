@@ -1,5 +1,12 @@
 from telegram import Updater
 from os import getenv
+import logging
+
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
 
 
 def help_message(bot, update):
@@ -11,7 +18,7 @@ def main():
     updater = Updater(botapi)
 
     dp = updater.dispatcher
-''
+
     dp.addTelegramCommandHandler("help", help_message)
 
     updater.start_polling()
