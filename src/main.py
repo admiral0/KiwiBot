@@ -1,4 +1,4 @@
-from telegram import Updater
+from telegram.ext import Updater
 from os import getenv
 import logging
 import sqlite3

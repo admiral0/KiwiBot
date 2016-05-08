@@ -1,4 +1,5 @@
 deploy*
+python/
 /src/data
 !deploy_key.enc
 .idea
