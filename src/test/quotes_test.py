@@ -27,4 +27,8 @@ def test_random():
 def test_search():
     q = Quotes(':memory:', connection)
     q.add('test', 'antani', 'cacca')
-    assert q.search('test', 'cacca')[0][1] == 'antani'
+    q.add('test', 'antani', 'culo')
+    q.add('no', 'antani', 'cacca')
+    res = q.search('test', 'cacca')
+    assert res[0][2] == 'antani'
+    assert len(res) == 1

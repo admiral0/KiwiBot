@@ -68,8 +68,11 @@ def quotes_search(bot,update,arg):
 
 def minimigrate(con):
     c = con.cursor()
-    c.execute("""
-            CREATE TABLE if not exists quotes (chat_id VARCHAR(128), author VARCHAR(128), quote TEXT);
+    c.executescript("""
+            CREATE TABLE IF NOT exists quotes (chat_id VARCHAR(128), author VARCHAR(128), quote TEXT);
+            DROP TABLE IF EXISTS quotes_index;
+            CREATE VIRTUAL TABLE quotes_index USING fts4(id, chat_id, author, quote);
+            INSERT INTO quotes_index SELECT rowid, chat_id, author, quote FROM quotes;
     """)
     con.commit()
 
