@@ -41,15 +41,18 @@ def quotes_random(bot, update):
         bot.sendMessage(update.message.chat_id, text=mq[2] + "\n\n" + mq[1])
 
 
-def quotes_search(bot,update,arg):
+def quotes_search(bot, update, arg):
     Quotes.instance.refresh_connection()
     amq = Quotes.instance.search(update.message.chat_id, arg)
     Quotes.instance.conn.close()
     if len(amq) == 0:
         bot.sendMessage(update.message.chat_id, text="Nessun risultato")
     else:
+        res = 'Risultati contenenti "{}": {}'
+        ris = []
         for mq in amq:
-            bot.sendMessage(update.message.chat_id, text=mq[2] + "\n" + mq[1])
+            ris.append(mq[0])
+        bot.sendMessage(update.message.chat_id, text=res.format(arg, str(ris)))
 
 
 def quotes_read(bot, update, rowid):
