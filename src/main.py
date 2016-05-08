@@ -13,8 +13,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 conn_string = 'data/data.sqlite3'
-qmgr = None
-
 
 def main():
     bot_api = getenv('KIWI_BOT_API_KEY')
@@ -33,5 +31,5 @@ if __name__ == '__main__':
     conn = sqlite3.connect(conn_string)
     minimigrate(conn)
     conn.close()
-    qmgr = Quotes(conn_string)
+    Quotes(conn_string)
     main()

@@ -3,7 +3,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class Quotes:
+    instance = None
 
     def __init__(self, connstr, conn=None):
         """
@@ -11,6 +13,7 @@ class Quotes:
         """
         self.connstring = connstr
         self.conn = conn
+        Quotes.instance = self
 
     def refresh_connection(self):
         logger.debug('Refreshing connection to database {}'.format(self.connstring))
@@ -36,3 +39,13 @@ class Quotes:
         logger.debug('Searching quotes in chat {} for "{}"'.format(chat_id, search))
         c.execute("SELECT * FROM quotes_index WHERE chat_id = ? and quote MATCH ?;", (chat_id, search))
         return c.fetchall()
+
+    def get(self, chat_id, num):
+        try:
+            c = self.conn.cursor()
+            logger.debug('Getting quote with rowid {} for chat {}'.format(num, chat_id))
+            c.execute('SELECT * FROM quotes WHERE chat_id = ? and rowid = ?', (chat_id, int(num)))
+            return c.fetchone()
+        except ValueError:
+            logger.warn('Cannot get int of "{}"'.format(num))
+            return None
