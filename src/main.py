@@ -3,6 +3,7 @@ from os import getenv
 import logging
 import sqlite3
 from quotes import Quotes
+from dbutil import minimigrate
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -66,21 +67,10 @@ def quotes_search(bot,update,arg):
         for mq in amq:
             bot.sendMessage(update.message.chat_id, text=mq[2] + "\n" + mq[1])
 
-def minimigrate(con):
-    c = con.cursor()
-    c.executescript("""
-            CREATE TABLE IF NOT exists quotes (chat_id VARCHAR(128), author VARCHAR(128), quote TEXT);
-            DROP TABLE IF EXISTS quotes_index;
-            CREATE VIRTUAL TABLE quotes_index USING fts4(id, chat_id, author, quote);
-            INSERT INTO quotes_index SELECT rowid, chat_id, author, quote FROM quotes;
-    """)
-    con.commit()
-
 
 def main():
-
-    botapi = getenv('KIWI_BOT_API_KEY')
-    updater = Updater(botapi)
+    bot_api = getenv('KIWI_BOT_API_KEY')
+    updater = Updater(bot_api)
 
     dp = updater.dispatcher
 

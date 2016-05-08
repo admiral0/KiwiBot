@@ -1,5 +1,5 @@
 import sqlite3
-from main import minimigrate
+from dbutil import minimigrate
 from quotes import Quotes
 
 connection = sqlite3.connect(":memory:")
